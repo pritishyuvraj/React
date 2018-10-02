@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  TouchableHighlight
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
@@ -16,8 +17,33 @@ export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
+  state = {
+    isRecording: false
+  }
 
-  render() {
+  onPress = () => {
+    this.setState({
+      isRecording: !this.state.isRecording
+    })
+  }
+
+  render(){
+    return(
+      <View style={styles.container}>
+        <TouchableHighlight
+          style={styles.button}
+          onPress={this.onPress}
+        >
+          <Text
+            style={styles.recordingText}>
+            {this.state.isRecording ? "Stop Recording": "Start Recording"}
+          </Text>
+        </TouchableHighlight>
+      </View>
+    )
+  }
+
+  render_temp() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -102,6 +128,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   developmentModeText: {
     marginBottom: 20,
@@ -164,7 +192,7 @@ const styles = StyleSheet.create({
     }),
     alignItems: 'center',
     backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
+    paddingVertical: 30,
   },
   tabBarInfoText: {
     fontSize: 17,
@@ -185,4 +213,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#800000',
+    borderRadius: 200,
+    borderWidth:1,
+    width: 200,
+    height: 200
+  },
+  recordingText: {
+    color: 'white',
+    fontSize: 30,
+    alignSelf: 'center',
+    paddingVertical: 50,
+    textAlign: 'center'
+  }
 });

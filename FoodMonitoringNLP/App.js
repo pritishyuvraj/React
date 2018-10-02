@@ -1,29 +1,48 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, Text, Image, ImageBackground } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    isLoadingFirstTime: true
   };
 
   render() {
-    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
-      return (
-        <AppLoading
-          startAsync={this._loadResourcesAsync}
-          onError={this._handleLoadingError}
-          onFinish={this._handleFinishLoading}
-        />
-      );
-    } else {
-      return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
+    console.log("State -> ", this.state.isLoadingFirstTime)
+    if(this.state.isLoadingFirstTime){
+      setTimeout( () => {this.setState({isLoadingFirstTime: false})}, 3000)
+      return(
+        <View style={{flex: 3, flexDirection: 'row', alignItems: 'center'}}>
+          <ImageBackground
+            source = {require('./assets/images/entrace_page.jpeg')}
+            style={styles.backgroundImage}>
+            <Text
+            style={styles.backgroundText}>
+            AI - Food Monitoring
+            </Text>
+          </ImageBackground>
         </View>
-      );
+      )
+    }
+    else{
+      if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+        return (
+          <AppLoading
+            startAsync={this._loadResourcesAsync}
+            onError={this._handleLoadingError}
+            onFinish={this._handleFinishLoading}
+          />
+        );
+      } else {
+        return (
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            <AppNavigator />
+          </View>
+        );
+      }
     }
   }
 
@@ -59,4 +78,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  backgroundImage: {
+    width: '100%',
+    height: '100%'
+  },
+  backgroundText: {
+    fontWeight: 'bold',
+    fontSize: 40,
+    flex: 3,
+    textAlign: 'center',
+    textAlignVertical: "bottom",
+    color: 'white',
+    paddingVertical: 60
+  }
 });
