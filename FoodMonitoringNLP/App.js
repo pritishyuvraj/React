@@ -12,7 +12,7 @@ export default class App extends React.Component {
   render() {
     console.log("State -> ", this.state.isLoadingFirstTime)
     if(this.state.isLoadingFirstTime){
-      setTimeout( () => {this.setState({isLoadingFirstTime: false})}, 3000)
+      setTimeout( () => {this.setState({isLoadingFirstTime: false})}, 1000)
       return(
         <View style={{flex: 3, flexDirection: 'row', alignItems: 'center'}}>
           <ImageBackground
