@@ -9,6 +9,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, TouchableHighlight, Image} from 'react-native';
 import Voice from 'react-native-voice';
+import Tts from 'react-native-tts';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -135,7 +136,34 @@ export default class App extends Component<Props> {
     });
   }
 
+  async _getMoviesFromApi() {
+  try {
+    let response = await fetch(
+      'https://facebook.github.io/react-native/movies.json'
+    );
+    let responseJson = await response.json();
+    console.log("response -> ", responseJson)
+    return responseJson.movies;
+  } catch (error) {
+    console.error(error);
+  }
+  }
+
   render() {
+    Tts.setDefaultLanguage('hi');
+    Tts.speak('हैलो प्रीतिश');
+    try {
+      let response = await fetch(
+        'https://facebook.github.io/react-native/movies.json'
+      );
+      let responseJson = await response.json();
+      console.log("response -> ", responseJson)
+      return responseJson.movies;
+    } catch (error) {
+      console.error(error);
+    }
+
+    console.log("see the state", this.state.results);
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
