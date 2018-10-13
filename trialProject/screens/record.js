@@ -19,7 +19,7 @@ const instructions = Platform.select({
 });
 
 type Props = {};
-export default class App extends Component<Props> {
+export default class record extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,6 +30,7 @@ export default class App extends Component<Props> {
       started: '',
       results: [],
       partialResults: [],
+      audioCount: 0
     };
     Voice.onSpeechStart = this.onSpeechStart.bind(this);
     Voice.onSpeechRecognized = this.onSpeechRecognized.bind(this);
@@ -38,6 +39,50 @@ export default class App extends Component<Props> {
     Voice.onSpeechResults = this.onSpeechResults.bind(this);
     Voice.onSpeechPartialResults = this.onSpeechPartialResults.bind(this);
     Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged.bind(this);
+  }
+
+  componentDidMount(){
+    // return fetch('https://facebook.github.io/react-native/movies.json')
+    console.log("starting to extract info")
+    return fetch('https://0d0b80a0.ngrok.io/pritishyuvraj')
+     .then((response) => response.json())
+     .then((responseJson) => {
+
+       this.setState({
+         isLoading: false,
+         dataSource: responseJson,
+       }, function(){
+         console.log("Reaching here", responseJson)
+       });
+
+     })
+     .catch((error) =>{
+       console.error("Error detected", error);
+     });
+  }
+
+  componentWillUpdate(nextProps, nextState){
+    if(nextState.audioCount !== this.state.audioCount){
+      console.log("starting to extract info", nextState.audioCount, this.state.audioCount, this.state.results);
+      stringToUrl = encodeURIComponent(this.state.results[0])
+      url = 'https://0d0b80a0.ngrok.io/' + stringToUrl;
+      // return fetch('https://0d0b80a0.ngrok.io/pritishyuvraj')
+      return fetch(url)
+       .then((response) => response.json())
+       .then((responseJson) => {
+
+         this.setState({
+           isLoading: false,
+           dataSource: responseJson,
+         }, function(){
+           console.log("Reaching here", responseJson)
+         });
+
+       })
+       .catch((error) =>{
+         console.error("Error detected", error);
+       });
+    }
   }
 
   componentWillUnmount() {
@@ -51,9 +96,22 @@ export default class App extends Component<Props> {
   }
 
   onSpeechRecognized(e) {
+    // this.setState({
+    //   recognized: '√',
+    // }, (async () => {
+    //   await this._sendVoiceData()
+    // })());
     this.setState({
       recognized: '√',
+    }, () => {
+      console.log("Audio recorded");
+      this.setState({
+        audioCount: this.state.audioCount + 1,
+      })
     });
+
+
+    console.log("speech has been recognized");
   }
 
   onSpeechEnd(e) {
@@ -71,6 +129,11 @@ export default class App extends Component<Props> {
   onSpeechResults(e) {
     this.setState({
       results: e.value,
+    }, () => {
+      console.log("Audio recorded");
+      this.setState({
+        audioCount: this.state.audioCount + 1,
+      })
     });
   }
 
@@ -132,7 +195,7 @@ export default class App extends Component<Props> {
       started: '',
       results: [],
       partialResults: [],
-      end: ''
+      end: '',
     });
   }
 
@@ -149,23 +212,38 @@ export default class App extends Component<Props> {
   }
   }
 
-  render() {
-    // Tts.setDefaultLanguage('hi');
-    // Tts.speak('हैलो प्रीतिश');
+  async _sendVoiceData() {
+    textToSend = this.state.recognized;
+    console.log("text to send", textToSend);
     try {
       let response = await fetch(
-        'https://facebook.github.io/react-native/movies.json'
+        'http://10.0.2.2:5000/pritishYUvraj'
       );
-      let responseJson = await response.json();
-      console.log("response -> ", responseJson)
-      return responseJson.movies;
+      // let responseJson = await response.json();
+      // console.log("response -> ", responseJson);
+      // return responseJson.movies;
     } catch (error) {
       console.error(error);
     }
+  }
+
+  render() {
+    // Tts.setDefaultLanguage('hi');
+    // Tts.speak('हैलो प्रीतिश');
+    // try {
+    //   let response = await fetch(
+    //     'https://facebook.github.io/react-native/movies.json'
+    //   );
+    //   let responseJson = await response.json();
+    //   console.log("response -> ", responseJson)
+    //   return responseJson.movies;
+    // } catch (error) {
+    //   console.error(error);
+    // }
 
 
 
-    console.log("see the state", this.state.results);
+    // console.log("see the state", this.state.results);
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>

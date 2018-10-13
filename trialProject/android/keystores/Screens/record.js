@@ -19,7 +19,7 @@ const instructions = Platform.select({
 });
 
 type Props = {};
-export default class App extends Component<Props> {
+export default class record extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
