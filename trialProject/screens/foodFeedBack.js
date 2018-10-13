@@ -2,8 +2,15 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Tts from 'react-native-tts';
 
 export default class foodFeedBack extends React.Component{
+  constructor(props){
+    super(props);
+    Tts.setDefaultLanguage('en-US')
+    this.onShortPress = this.onShortPress.bind(this);
+    this.onLongPress = this.onLongPress.bind(this);
+  }
   state = {
     isLoading: true,
     dataSource: null
@@ -23,7 +30,14 @@ export default class foodFeedBack extends React.Component{
         console.error("Error detecting fetching data", error)
       })
   }
+  onShortPress(){
+    console.log("User pressed for shorter time");
+  }
 
+  onLongPress(summary){
+    console.log("User pressed for longer Time");
+    Tts.speak(summary)
+  }
   render(){
     if(this.state.isLoading){
       return(
@@ -34,7 +48,17 @@ export default class foodFeedBack extends React.Component{
     }else{
       return(
         <View>
-          <Text> Reached feedback page</Text>
+          {
+            this.state.dataSource.map( (description, index) => (
+              <ListItem
+                key = {index}
+                title = {description.day}
+                subtitle = {description.summary}
+                onPress = {() => this.onShortPress()}
+                onLongPress = {() => this.onLongPress(description.summary)}
+                />
+            ))
+          }
         </View>
       )
     }
