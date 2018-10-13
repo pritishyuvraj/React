@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import record from '../screens/record';
+import foodFeedBack from '../screens/foodFeedBack';
 import TabBarIcon from '../components/TabBarIcon';
 
 const HomeStack = createStackNavigator({
@@ -23,7 +24,7 @@ HomeStack.navigationOptions = {
 };
 
 const LinkStack = createStackNavigator({
-  Links: record,
+  Links: foodFeedBack,
 });
 
 LinkStack.navigationOptions = {

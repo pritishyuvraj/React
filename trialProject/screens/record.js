@@ -230,20 +230,6 @@ export default class record extends Component<Props> {
   render() {
     // Tts.setDefaultLanguage('hi');
     // Tts.speak('हैलो प्रीतिश');
-    // try {
-    //   let response = await fetch(
-    //     'https://facebook.github.io/react-native/movies.json'
-    //   );
-    //   let responseJson = await response.json();
-    //   console.log("response -> ", responseJson)
-    //   return responseJson.movies;
-    // } catch (error) {
-    //   console.error(error);
-    // }
-
-
-
-    // console.log("see the state", this.state.results);
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
