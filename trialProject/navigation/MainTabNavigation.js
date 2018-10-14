@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import record from '../screens/record';
 import foodFeedBack from '../screens/foodFeedBack';
+import HealthStatus from '../screens/HealthStatus';
 import TabBarIcon from '../components/TabBarIcon';
 
 const HomeStack = createStackNavigator({
@@ -30,7 +31,17 @@ const LinkStack = createStackNavigator({
 LinkStack.navigationOptions = {
   tabBarLabel: 'FeedBack'
 };
+
+const FormStack = createStackNavigator({
+  Links: HealthStatus
+});
+
+FormStack.navigationOptions = {
+  title: 'Health Status'
+}
+
 export default createBottomTabNavigator({
   HomeStack,
-  LinkStack
+  LinkStack,
+  FormStack
 });
