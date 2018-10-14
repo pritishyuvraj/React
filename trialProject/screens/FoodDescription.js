@@ -18,11 +18,11 @@ export default class FoodDescription extends React.Component{
 
   componentDidMount(){
       // this.props.foodDetails
-      console.log("component did mount", this.props.foodDetails.meals.breakfast.length);
+      console.log("component did mount", this.props.foodDetails.breakfast.length);
 
-      if (this.props.foodDetails.meals.breakfast.length > 0){
+      if (this.props.foodDetails.breakfast.length > 0){
           var bf = '';
-          var bf_list = this.props.foodDetails.meals.breakfast;
+          var bf_list = this.props.foodDetails.breakfast;
           for(var i = 0; i < bf_list.length; i++){
             console.log("see this -> ", bf_list[i])
             bf += bf_list[i]
@@ -36,9 +36,9 @@ export default class FoodDescription extends React.Component{
         );
       }
 
-      if (this.props.foodDetails.meals.lunch.length > 0){
+      if (this.props.foodDetails.lunch.length > 0){
           var bf = '';
-          var bf_list = this.props.foodDetails.meals.lunch;
+          var bf_list = this.props.foodDetails.lunch;
           for(var i = 0; i < bf_list.length; i++){
             console.log("see this -> ", bf_list[i])
             bf += bf_list[i];
@@ -52,9 +52,9 @@ export default class FoodDescription extends React.Component{
         );
       }
 
-      if (this.props.foodDetails.meals.dinner.length > 0){
+      if (this.props.foodDetails.dinner.length > 0){
           var bf = '';
-          var bf_list = this.props.foodDetails.meals.dinner;
+          var bf_list = this.props.foodDetails.dinner;
           for(var i = 0; i < bf_list.length; i++){
             console.log("see this -> ", bf_list[i])
             bf += bf_list[i];

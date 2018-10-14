@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView, RefreshControl } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Tts from 'react-native-tts';
@@ -16,7 +16,8 @@ export default class foodFeedBack extends React.Component{
     isLoading: true,
     dataSource: null,
     showingFoodDetails: false,
-    fetchDetails: null
+    fetchDetails: null,
+    refreshing: false,
   }
 
   componentDidMount(){
@@ -37,15 +38,29 @@ export default class foodFeedBack extends React.Component{
   componentWillUpdate(nextState, nextProps){
     if(nextState.showingFoodDetails !== this.state.showingFoodDetails){
       console.log("Going to display food details");
-
+    }
+    if(nextState.refreshing === true && this.state.refreshing !== nextState.refreshing){
+      console.log("catching this state");
+      return fetch('https://75387e5e.ngrok.io/getFooodHistory')
+        .then ((response) => response.json())
+        .then((responseJson) => {
+          this.setState({
+            dataSource: responseJson,
+            refreshing: false
+          })
+          // console.log("response Json", responseJson)
+        })
+        .catch((error) => {
+          console.error("Error detecting fetching data", error)
+        })
     }
   }
 
   onShortPress(description){
-    console.log("User pressed for shorter time");
+    // console.log("User pressed for shorter time", description.day, description[description.day.toLowerCase()]);
     this.setState({
       showingFoodDetails: true,
-      fetchDetails: description
+      fetchDetails: description[description.day.toLowerCase()]
     })
   }
 
@@ -58,6 +73,26 @@ export default class foodFeedBack extends React.Component{
     console.log("User pressed for longer Time");
     Tts.speak(summary)
   }
+
+  _onRefresh = () => {
+    this.setState({refreshing: true}, () =>{
+      return fetch('https://75387e5e.ngrok.io/getFooodHistory')
+        .then ((response) => response.json())
+        .then((responseJson) => {
+          this.setState({
+            dataSource: responseJson,
+            refreshing: false
+          })
+          // console.log("response Json", responseJson)
+        })
+        .catch((error) => {
+          console.error("Error detecting fetching data", error)
+        });
+    });
+    this.setState({refreshing: false})
+    console.log("started to refresh");
+  }
+
   render(){
     console.log("status of showingFoodDetails", this.state.showingFoodDetails)
     if(this.state.isLoading){
@@ -76,6 +111,14 @@ export default class foodFeedBack extends React.Component{
     else{
       return(
         <View>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+              />
+            }
+            >
           {
             this.state.dataSource.map( (description, index) => (
               <ListItem
@@ -85,18 +128,12 @@ export default class foodFeedBack extends React.Component{
                   description.summary
                 }
                 rightTitle = "Cal"
-                // subtitle = {
-                //   <View>
-                //       <Text>
-                //         {description.meals.lunch[0]}
-                //       </Text>
-                //   </View>
-                // }
                 onPress = {() => this.onShortPress(description)}
                 onLongPress = {() => this.onLongPress(description.summary)}
                 />
             ))
           }
+          </ScrollView>
         </View>
       )
     }
