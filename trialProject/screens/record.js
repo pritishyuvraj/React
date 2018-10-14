@@ -30,7 +30,8 @@ export default class record extends Component<Props> {
       started: '',
       results: [],
       partialResults: [],
-      audioCount: 0
+      audioCount: 0,
+      isRecording: false,
     };
     Voice.onSpeechStart = this.onSpeechStart.bind(this);
     Voice.onSpeechRecognized = this.onSpeechRecognized.bind(this);
@@ -157,7 +158,8 @@ export default class record extends Component<Props> {
       started: '',
       results: [],
       partialResults: [],
-      end: ''
+      end: '',
+      isRecording: true,
     });
     try {
       await Voice.start('en-US');
@@ -167,6 +169,9 @@ export default class record extends Component<Props> {
   }
 
   async _stopRecognizing(e) {
+    this.setState({
+      isRecording: false
+    })
     try {
       await Voice.stop();
     } catch (e) {
@@ -227,102 +232,73 @@ export default class record extends Component<Props> {
     }
   }
 
-  render() {
-    // Tts.setDefaultLanguage('hi');
-    // Tts.speak('हैलो प्रीतिश');
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native Voice!
-        </Text>
-        <Text style={styles.instructions}>
-          Press the button and start speaking.
-        </Text>
-        <Text
-          style={styles.stat}>
-          {`Started: ${this.state.started}`}
-        </Text>
-        <Text
-          style={styles.stat}>
-          {`Recognized: ${this.state.recognized}`}
-        </Text>
-        <Text
-          style={styles.stat}>
-          {`Pitch: ${this.state.pitch}`}
-        </Text>
-        <Text
-          style={styles.stat}>
-          {`Error: ${this.state.error}`}
-        </Text>
-        <Text
-          style={styles.stat}>
-          Results
-        </Text>
-        {this.state.results.map((result, index) => {
-          return (
-            <Text
-              key={`result-${index}`}
-              style={styles.stat}>
-              {result}
-            </Text>
-          )
-        })}
-        <Text
-          style={styles.stat}>
-          Partial Results
-        </Text>
-        {this.state.partialResults.map((result, index) => {
-          return (
-            <Text
-              key={`partial-result-${index}`}
-              style={styles.stat}>
-              {result}
-            </Text>
-          )
-        })}
-        <Text
-          style={styles.stat}>
-          {`End: ${this.state.end}`}
-        </Text>
+  recordButton() {
+    if(!this.state.isRecording){
+      return(
         <TouchableHighlight onPress={this._startRecognizing.bind(this)}>
           <Image
             style={styles.button}
-            source={require('./button.png')}
+            source={require('./recording_start.jpg')}
           />
         </TouchableHighlight>
+      )
+    } else{
+      return(
         <TouchableHighlight onPress={this._stopRecognizing.bind(this)}>
-          <Text
-            style={styles.action}>
-            Stop Recognizing
-          </Text>
+        <Image
+          style={styles.button}
+          source={require('./recording_stop.jpg')}
+        />
         </TouchableHighlight>
-        <TouchableHighlight onPress={this._cancelRecognizing.bind(this)}>
+      )
+
+    }
+  }
+
+  render(){
+    return(
+      <View style={styles.container}>
+      <Text
+        style={styles.stat}>
+        Results
+      </Text>
+      {this.state.results.map((result, index) => {
+        return (
           <Text
-            style={styles.action}>
-            Cancel
+            key={`result-${index}`}
+            style={styles.stat}>
+            {result}
           </Text>
-        </TouchableHighlight>
-        <TouchableHighlight onPress={this._destroyRecognizer.bind(this)}>
-          <Text
-            style={styles.action}>
-            Destroy
-          </Text>
-        </TouchableHighlight>
+        )
+      })}
+      { this.recordButton() }
+      <TouchableHighlight onPress={this._cancelRecognizing.bind(this)}>
+        <Text
+          style={styles.action}>
+          Cancel
+        </Text>
+      </TouchableHighlight>
+      <TouchableHighlight onPress={this._destroyRecognizer.bind(this)}>
+        <Text
+          style={styles.action}>
+          Destroy
+        </Text>
+      </TouchableHighlight>
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   button: {
-    width: 50,
-    height: 50,
+    width: 205,
+    height: 200,
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'white',
   },
   welcome: {
     fontSize: 20,
