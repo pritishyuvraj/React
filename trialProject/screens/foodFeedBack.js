@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Tts from 'react-native-tts';
+import FoodDescription from './FoodDescription'
 
 export default class foodFeedBack extends React.Component{
   constructor(props){
@@ -13,25 +14,44 @@ export default class foodFeedBack extends React.Component{
   }
   state = {
     isLoading: true,
-    dataSource: null
+    dataSource: null,
+    showingFoodDetails: false,
+    fetchDetails: null
   }
 
   componentDidMount(){
-    return fetch('https://0d0b80a0.ngrok.io/getFooodHistory')
+    return fetch('https://75387e5e.ngrok.io/getFooodHistory')
       .then ((response) => response.json())
       .then((responseJson) => {
         this.setState({
           dataSource: responseJson,
           isLoading: false
         })
-        console.log("response Json", responseJson)
+        // console.log("response Json", responseJson)
       })
       .catch((error) => {
         console.error("Error detecting fetching data", error)
       })
   }
-  onShortPress(){
+
+  componentWillUpdate(nextState, nextProps){
+    if(nextState.showingFoodDetails !== this.state.showingFoodDetails){
+      console.log("Going to display food details");
+
+    }
+  }
+
+  onShortPress(description){
     console.log("User pressed for shorter time");
+    this.setState({
+      showingFoodDetails: true,
+      fetchDetails: description
+    })
+  }
+
+  goBack(){
+    console.log("being called go back")
+    this.setState({showingFoodDetails: false})
   }
 
   onLongPress(summary){
@@ -39,13 +59,21 @@ export default class foodFeedBack extends React.Component{
     Tts.speak(summary)
   }
   render(){
+    console.log("status of showingFoodDetails", this.state.showingFoodDetails)
     if(this.state.isLoading){
       return(
         <View style={{ flex: 1 }}>
          <Spinner visible={this.state.isLoading} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
        </View>
       )
-    }else{
+    }
+    else if (!this.state.isLoading && this.state.showingFoodDetails) {
+      return(<FoodDescription
+              name={'react native rocks'}
+              foodDetails = {this.state.fetchDetails}
+              closeView = {() => this.goBack()} /> )
+    }
+    else{
       return(
         <View>
           {
@@ -53,8 +81,18 @@ export default class foodFeedBack extends React.Component{
               <ListItem
                 key = {index}
                 title = {description.day}
-                subtitle = {description.summary}
-                onPress = {() => this.onShortPress()}
+                subtitle = {
+                  description.summary
+                }
+                rightTitle = "Cal"
+                // subtitle = {
+                //   <View>
+                //       <Text>
+                //         {description.meals.lunch[0]}
+                //       </Text>
+                //   </View>
+                // }
+                onPress = {() => this.onShortPress(description)}
                 onLongPress = {() => this.onLongPress(description.summary)}
                 />
             ))
