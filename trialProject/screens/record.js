@@ -262,15 +262,6 @@ export default class record extends Component<Props> {
         style={styles.stat}>
         Results
       </Text>
-      {this.state.results.map((result, index) => {
-        return (
-          <Text
-            key={`result-${index}`}
-            style={styles.stat}>
-            {result}
-          </Text>
-        )
-      })}
       { this.recordButton() }
       <TouchableHighlight onPress={this._cancelRecognizing.bind(this)}>
         <Text
