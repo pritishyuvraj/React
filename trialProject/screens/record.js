@@ -66,7 +66,7 @@ export default class record extends Component<Props> {
     if(nextState.audioCount !== this.state.audioCount){
       console.log("starting to extract info", nextState.audioCount, this.state.audioCount, this.state.results);
       stringToUrl = encodeURIComponent(this.state.results[0])
-      url = 'https://75387e5e.ngrok.io/' + stringToUrl;
+      url = 'https://cd661cb0.ngrok.io/' + stringToUrl;
       // return fetch('https://0d0b80a0.ngrok.io/pritishyuvraj')
       return fetch(url)
        .then((response) => response.json())

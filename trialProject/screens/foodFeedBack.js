@@ -21,7 +21,7 @@ export default class foodFeedBack extends React.Component{
   }
 
   componentDidMount(){
-    return fetch('https://75387e5e.ngrok.io/getFooodHistory')
+    return fetch('https://cd661cb0.ngrok.io/getFooodHistory')
       .then ((response) => response.json())
       .then((responseJson) => {
         this.setState({
@@ -41,7 +41,7 @@ export default class foodFeedBack extends React.Component{
     }
     if(nextState.refreshing === true && this.state.refreshing !== nextState.refreshing){
       console.log("catching this state");
-      return fetch('https://75387e5e.ngrok.io/getFooodHistory')
+      return fetch('https://cd661cb0.ngrok.io/getFooodHistory')
         .then ((response) => response.json())
         .then((responseJson) => {
           this.setState({
@@ -76,7 +76,7 @@ export default class foodFeedBack extends React.Component{
 
   _onRefresh = () => {
     this.setState({refreshing: true}, () =>{
-      return fetch('https://75387e5e.ngrok.io/getFooodHistory')
+      return fetch('https://cd661cb0.ngrok.io/getFooodHistory')
         .then ((response) => response.json())
         .then((responseJson) => {
           this.setState({
