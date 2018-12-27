@@ -18,6 +18,7 @@ import { RNCamera } from "react-native-camera";
 import RNFetchBlob from "react-native-fetch-blob";
 import { PermissionsAndroid } from "react-native";
 import CameraRollApp from "./android_camera_roll/CameraRollApp";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 
 const instructions = Platform.select({
   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
@@ -41,7 +42,7 @@ const PendingView = () => (
 
 type Props = {};
 
-export default class App extends Component<Props> {
+class App extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
@@ -83,16 +84,6 @@ export default class App extends Component<Props> {
     }
   }
 
-  render1() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
-  }
-
   render() {
     if (this.state.displayCameraRoll) {
       // return (
@@ -128,7 +119,9 @@ export default class App extends Component<Props> {
                   <Text style={{ fontSize: 14 }}> SNAP </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => this.changeToCameraRoll()}
+                  onPress={() => {
+                    this.props.navigation.navigate("Photos");
+                  }}
                   style={styles.capture}
                 >
                   <Text style={{ fontSize: 14 }}> Camera Roll </Text>
@@ -208,3 +201,5 @@ const styles = StyleSheet.create({
     margin: 20
   }
 });
+
+export default App;
