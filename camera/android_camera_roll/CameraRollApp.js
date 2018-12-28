@@ -22,8 +22,7 @@ class CameraRollApp extends Component<Props> {
 
   async componentDidMount() {
     CameraRoll.getPhotos({
-      first: 20,
-      groupName: "Camera",
+      first: 100,
       assetType: "Photos"
     })
       .then(r => {
@@ -97,7 +96,6 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     justifyContent: "flex-end",
-    padding: 0.5,
     height: 100
   }
 });

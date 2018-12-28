@@ -12,7 +12,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  CameraRoll
 } from "react-native";
 import { RNCamera } from "react-native-camera";
 import RNFetchBlob from "react-native-fetch-blob";
@@ -156,16 +157,19 @@ class App extends Component<Props> {
   takePicture = async function(camera) {
     const options = { quality: 0.5, base64: true };
     const data = await camera.takePictureAsync(options);
-    var path_to_save =
-      RNFetchBlob.fs.dirs.DCIMDir +
-      "/Camera/" +
-      this.convertTime(this.state.curTime) +
-      ".jpg";
-    console.log(data.uri);
-    console.log("Write file at -> ", path_to_save);
-    RNFetchBlob.fs.writeFile(path_to_save, data.uri, "uri").then(() => {
-      console.log("Wrote!!!!");
-    });
+    console.log("view data -> ", data);
+    CameraRoll.saveToCameraRoll(data.uri);
+    //
+    // var path_to_save =
+    //   RNFetchBlob.fs.dirs.DCIMDir +
+    //   "/Camera/" +
+    //   this.convertTime(this.state.curTime) +
+    //   ".jpg";
+    // console.log(data.uri);
+    // console.log("Write file at -> ", path_to_save);
+    // RNFetchBlob.fs.writeFile(path_to_save, data.uri, "uri").then(() => {
+    //   console.log("Wrote!!!!");
+    // });
   };
 }
 

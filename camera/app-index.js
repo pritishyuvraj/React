@@ -49,7 +49,12 @@ const RootStack = createStackNavigator(
         header: null
       }
     },
-    Photos: CameraRollApp
+    Photos: {
+      screen: CameraRollApp,
+      navigationOptions: {
+        headerTitle: "Photos"
+      }
+    }
   },
   {
     initialRouteName: "Camera"
